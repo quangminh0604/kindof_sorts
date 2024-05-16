@@ -45,33 +45,39 @@ const int dy[] = {0, 1, 0, -1, 1, -1, -1, 1};
 int n;
 int a[MAX];
 
-void quicksort(int left, int right) {
-    if (left > right) return;
-    if (left == right) return;
-    if (left + 1 == right) {
-        if (a[left] > a[right]) swap(a[left], a[right]);
-        return;
+int partition (int low, int high)
+{
+    string pivot = a[high];    // pivot
+    int left = low;
+    int right = high - 1;
+    while(true){
+        while(left <= right && a[left] < pivot) left++;
+        while(right >= left && pivot < a[right]) right--;
+        if (left >= right) break;
+        swap(a[left], a[right]);
+        left++;
+        right--;
     }
-    
-    int pivot = right;
-    int l = left, r = right - 1;
-    while (l < r) {
-        while (l < r && a[l] < a[pivot]) l++;
-        while (l < r && a[r] >= a[pivot]) r--;
-        if (l < r) swap(a[l], a[r]);
+    swap(a[left], a[high]);
+    return left;
+}
+
+void quickSort(int low, int high)
+{
+    if (low < high)
+    {
+        int pi = partition(low, high);
+
+        quickSort(low, pi - 1);
+        quickSort(pi + 1, high);
     }
-    swap(a[l], a[pivot]);
-    pivot = l;
-    quicksort(left, pivot - 1);
-    quicksort(pivot + 1, right);
-    return;
 }
 
 void solve() {
     cin >> n;
     FOR(i, 1, n) cin >> a[i];
     
-    quicksort(1, n);
+    quickSort(1, n);
     FOR(i, 1, n) cout << a[i] << " ";
 }
  
